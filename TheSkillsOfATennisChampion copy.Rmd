@@ -1,0 +1,155 @@
+---
+title: "The Skills of a Tennis Champion"
+author: "Abel Ortiz, Adrian Miller, Hector Jimenez, Alwin Joseph"
+date: "2022-12-08"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# The Skills of a Tennis Champion
+
+Through the course of this report, we will be attempting to answer one main question, what are the skills of a tennis champion? To facilitate the understanding of this question, we will also examine whether any external variables, like the materials used to build a court, have any influence on winning. We will also incorporate data from male and female competitors to determine if there are any key differences with play style between the champions of their division. By evaluating our data, we were able to construct a story that reveal special attributes of champions. We were able to find that great tennis players understand the importance of playing aggressively at the right time. Understanding these critical moments allow players to exploit their opponent's weaknesses, creating an advantage. As our story continues, we were also able to reveal that champions will always try their best to remain in control. Having control over the court allows players to dictate the pace of the game. Lastly, we found that the best tennis players will always go the extra mile, whether it is in training or studying the rules of the game. It is important to note that we are examining the top tournaments in all of tennis. We can expect the competing athletes to already hold high levels of physical capabilities, many of them have trained since childhood. It's the extra 1% of effort that sets champions above the rest. Our final graphic confirms this. The final graphic of this report will measure successful first serves throughout the different rounds of a tennis match. We will see that the top 50% of winners are able to maintain a slightly higher average of first serves won than the top 50% of their opponents. It is these slight differences that help set tennis champions above their peers.
+
+Data for this project was retrieved from the machine learning repository at the University of California at Irvine. The data provided includes statistics from the top four, most prestigious tennis tournaments hosted in 2013; the US Open, French Open, Australian Open, and Wimbledon. Each file had forty-two columns and around one hundred rows of information. In total, there was around one thousand rows of workable data. The data for each tournament was further divided into male and female categories, which opened our research to analyze any key differences or similarities between the sexes. We found the data provided by UCI to be relativity clean, few changes were required to make this data workable. The biggest change we made to the data formatting was grouping all data for men and all data for women into their own, separate files. By doing so, we created a two files that account for all data, instead of having eight. We decided to keep the individual files for all tournaments for investigating specific tournament. Here is the link to the data repository: <https://archive.ics.uci.edu/ml/datasets/Tennis+Major+Tournament+Match+Statistics>
+
+### A champion knows when to play aggressive.
+
+The first graph used to build this story takes two variables from the Australian Open, net points attempted and net points scored. A net point is earned when a player scores while in close proximity to the net. Being closer to the net allows a player to return the ball quicker, forcing the opponent into confusion and higher levels of pressure. We used a scatter plot to graph the the relationship between these points. We also layered a linear line through the scatter plot which represents the best fit line. The discovery we made showed that the more net points a player attempts, the more net points they are able to score. While these plays can prove to be challenging, being able to master them will always result in a better outcome. Knowing how and when to preform net points is key to playing aggressively.
+
+```{r echo = TRUE, warning=FALSE, message=FALSE}
+
+#Australia Open 2013 - men
+#NPW.1 is net points won by player 1
+#NPA.1 is net points attempted by player 1
+
+library(ggplot2)
+library(readr)
+AusOpen_men_2013 <- read_csv("AusOpen-men-2013.csv", show_col_types = FALSE)
+tennis_data <- AusOpen_men_2013[,sapply(AusOpen_men_2013, is.numeric)]
+Y <- ggplot( data = tennis_data, mapping = aes(x = NPW.1, y = NPA.1))
+Y + geom_point() + geom_smooth(method= lm, se = FALSE)
+```
+
+The next two plots are used to reinforce this idea by showing examples from the 2013 French Open for men and the 2013 Wimbledon tournament for women. Both of these additional plots also show a scatter plot with net points attempted as the x-axis and net points won for the y-axis along with the best fit line. All of the three graphs show a strong, positive relationship, implying a strong correlation between the two variables. We decided on using scatter plots because they expose correlations, which is key to understand the relationship between these two variables. They also help present information in a clean manner with few distractions.
+
+```{r echo = TRUE, warning=FALSE, message=FALSE}
+
+#French Open 2013 - men
+#NPW.1 is net points won by player 1
+#NPA.1 is net points attempted by player 1
+
+library(ggplot2)
+library(readr)
+FrenchOpen_men_2013 <- read_csv("FrenchOpen-men-2013.csv", show_col_types = FALSE)
+tennis_data <- FrenchOpen_men_2013[,sapply(FrenchOpen_men_2013, is.numeric)]
+Y <- ggplot( data = tennis_data, mapping = aes(x = NPW.1, y = NPA.1))
+Y + geom_point() + geom_smooth(method= lm, se = FALSE)
+```
+
+```{r echo = TRUE, warning=FALSE, message=FALSE}
+
+#Wimbledon - womens
+#NPW.1 is net points won by player 1
+#NPA.1 is net points attempted by player 1
+
+library(ggplot2)
+library(readr)
+Wimbledon_women_2013 <- read_csv("Wimbledon-women-2013.csv", show_col_types = FALSE)
+tennis_data <- Wimbledon_women_2013[,sapply(Wimbledon_women_2013, is.numeric)]
+Y <- ggplot( data = tennis_data, mapping = aes(x = NPW.1, y = NPA.1))
+Y + geom_point() + geom_smooth(method= lm, se = FALSE)
+```
+
+### A champion does their best to remain in control.
+
+Continuing our story, we come to our second point. A great tennis player will always do their best to control the court. They will do their best to set the pace of the match. We uncovered this by examining the number of break points won across rounds. When a player scores a break point, they effectively take the serve away from their opponent, placing the next serve in their hand. This allows them to continue playing the match with an advantage. To measure this statistic, we used a box plots for every round in a match, up to seven. We chose to use a box plot because they give us an accurate map of where most of the data lives. We can easily identify the interquartile ranges along with medians and outliers. Furthermore, we divided the data based on who won and who lost the match to give to highlight the differences between champions and their opponents. We were able to find that players who win have a much higher median break points won than their opponents. On average, 50% of the break points won by the losing side are not within range of 75% of break points won by the winner. This statistic shows a noticeable difference in performance between winners and losers. Limited data was provided for round seven since most tennis matches last six rounds, so the box plots for round seven are not reliable sources of information
+
+```{r echo = TRUE, warning=FALSE, message=FALSE}
+
+#All mens tournaments
+#BPW.1 is break points won by player 1
+#Round tracks the rounds within the match
+#Facet "0" tracks players 1 who lost
+#Facet "1" tracks players 1 who won
+
+library(ggplot2)
+library(readr)
+men <- read_csv("men.csv", show_col_types = FALSE)
+men$Round = as.character(men$Round)
+p <- ggplot(men, aes(x=Round, y=BPW.1)) + geom_boxplot() + facet_wrap(~ Result)
+p
+```
+
+The following graph also depicts the same measurements as the previous graphs, but this time we are tracking break points won across rounds for female athletes. The results are almost identical, showing that the 50% of break points won by those who lost the match are not in range of 75% of break points won by winners. Thus confirming that champions will do their best to remain in control of the court.
+
+```{r echo = TRUE, warning=FALSE, message=FALSE}
+
+#All women tournaments
+#BPW.1 is break points won by player 1
+#Round tracks the rounds within the match
+#Facet "0" tracks players 1 who lost
+#Facet "1" tracks players 1 who won
+
+library(ggplot2)
+library(readr)
+womens <- read_csv("womens.csv", show_col_types = FALSE)
+womens$Round = as.character(womens$Round)
+p <- ggplot(womens, aes(x=Round, y=BPW.1)) + geom_boxplot() + facet_wrap(~ Result)
+p
+```
+
+### Going the extra mile
+
+For the last section of the story, we describe how athletes must endure rigorous training to become a champion. Tennis players at this level of competition are already used to high intensity training and conditioning, most have played since they were young. A champion must put in extra work to stand out from their competitors. To measure the additional stamina of champions and its effect on the game, we first evaluated the occurrence of aces. Aces are scored when an opponent is unable to hit a serve. Doing these plays requires precision and honed stamina. A good player will be able to identify fatigue in their opponent later in the match, scoring aces allows the player to use their own stamina to take advantage of their weaker opponent. The first graph for this chapter of the story measures the density of aces scored by winners and those defeated. The density graph, similar to the box plot, we can see where most of the data in concentrated. Having these two facets allows us to recognize differences between the two fairly quick. It presents the data we need with no clutter. We are able to observe that winners have a wider distribution of aces, corresponding to more aces scored. We can see that most players who lose tend to score around four aces per match, with a narrow distribution of aces to the right of the peak. Players who win have a peak density around seven aces per match but also have a wider distribution, showing that winners are able to score more aces throughout the match.
+
+```{r echo = TRUE, warning=FALSE, message=FALSE}
+
+#All men tournements
+#ACE.1 are aces won by player 1
+#Facet "0" tracks players 1 who lost
+#Facet "1" tracks players 1 who won
+
+library(ggplot2)
+library(readr)
+men <- read_csv("men.csv", show_col_types = FALSE)
+p <- ggplot(men, aes(x=ACE.1)) + geom_density() + facet_wrap(~ Result)
+p
+```
+
+The next graph in this chapter show a different perspective on the distribution of aces. This graph measures the total aces scores and the total wins. It uses different shades of blue to represent different concentrations of data, making it easier to recognize points that stand out. In the graph below, we can easily tell which players preform better than others given the specific data. We clearly see that most players score less than 10 aces per match, but the few outliers that score more aces are rewarded with more wins. These are the players that put in the extra effort to stand out among their opponents.
+
+```{r echo = TRUE, warning=FALSE, message=FALSE}
+
+#All men tournements
+#ACE.1 are aces won by player 1
+#WNR.1 are the total wins by player 1
+#Facet "0" tracks players 1 who lost
+#Facet "1" tracks players 1 who won
+
+library(ggplot2)
+library(readr)
+men <- read_csv("men.csv", show_col_types = FALSE)
+p <- ggplot(men, aes(x=ACE.1, y=WNR.1)) + geom_bin_2d()
+p
+```
+
+The final visualization of this chapter is also our final graphic. We believe it shows how going the extra mile by training harder than your opponent will set you apart from the crowd, making a player a champion. This graph measures the first serve won across rounds for players who won and lost matches. We used a series of box plots to be able to identify the range and density of the data provided by this statistic. Color was added to the box plots so readers can quickly identify differences between players who won or lost certain rounds. We are able to show that median first serves won by the winner is slightly higher than the first serves won by the losing side. As stated, the median for both of the sides are close, but on average, the winner is able to out preform the loser almost every round. It is slight differences like the one demonstrated in this graph that help players win, especially when you are competing against the top athletes in the sport. Players who put in the extra 1% will almost always come out on top of the competition.
+
+```{r echo = TRUE, warning=FALSE, message=FALSE}
+
+#All men tournaments
+#FSW.1 are first serves won by player 1
+#Round are the total rounds
+#Facet "0" tracks players 1 who lost
+#Facet "1" tracks players 1 who won
+
+library(ggplot2)
+library(readr)
+men <- read_csv("men.csv", show_col_types = FALSE)
+men$Round = as.character(men$Round)
+p <- ggplot(men, aes(x=Round, y= FSW.1, color = Round))
+p + geom_boxplot() + facet_wrap(~ Result)
+```
